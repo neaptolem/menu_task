@@ -32,9 +32,23 @@ var menu = {
     }, {
         title: 'item 6',
         link: '#'
+    }, {
+        title: 'item 7',
+        link: '#'
+    }, {
+        title: 'item 8',
+        link: '#'
+    }, {
+        title: 'item 8',
+        link: '#'
+    }, {
+        title: 'item 9',
+        link: '#'
+    }, {
+        title: 'item 10',
+        link: '#'
     }]
 };
-
 
 function render(items) {
     var nodes = items.map(function(item) {
@@ -52,22 +66,26 @@ function render(items) {
 
 document.getElementById('root').innerHTML = render(menu.items);
 var doc = document;
-var scrTopBtn = createButton('Top', 'scrTopBtn');
-var scrDownBtn = createButton('Down', 'scrDownBtn');
+var scrTopBtn = createButton('&#708;', 'scrTopBtn');
+var scrDownBtn = createButton('&#709;', 'scrDownBtn');
 
 var rootItem = doc.querySelector('#root ul');
 var root = doc.getElementById("root");
 var rootItemAll = doc.querySelectorAll('#root ul');
+var rootParentA;
+rootItem.style.height='200px';
 root.insertBefore(scrTopBtn, root.childNodes[0]);
 root.appendChild(scrDownBtn);
 
+scrTopBtn.style.visibility = "hidden";
+
 setIdChildren();
+
 //Functions
 function createButton(s, idName) {
     var element = doc.createElement('li');
     var button = doc.createElement('a');
-    var textNode = doc.createTextNode(s);
-    button.appendChild(textNode);
+    button.innerHTML+=s;
     button.setAttribute('id', idName);
     button.setAttribute('href', '');
     element.appendChild(button);
@@ -80,6 +98,11 @@ function setIdChildren() {
         rootItemAll[i].classList.add('children');
         rootItemAll[i].parentElement.classList.add('parent');
     }
+    rootParentA = doc.querySelectorAll('.parent>a');
+    [].map.call(rootParentA, function addArow(e) {
+        e.innerHTML += '  &#8250';
+
+    })
 }
 //Events
 scrDownBtn.addEventListener('click', function(e) {
@@ -90,4 +113,20 @@ scrDownBtn.addEventListener('click', function(e) {
 scrTopBtn.addEventListener('click', function(e) {
     e.preventDefault();
     rootItem.scrollTop -= 10;
+});
+
+rootItem.addEventListener('scroll', function(e) {
+    e.preventDefault();
+    if (rootItem.scrollTop > 0) {
+        scrTopBtn.style.visibility = "visible";
+    } else {
+        scrTopBtn.style.visibility = "hidden";
+    }
+    console.log(rootItem.clientHeight);
+    if (rootItem.scrollTop==rootItem.scrollHeight-rootItem.clientHeight){
+      scrDownBtn.style.visibility = "hidden";
+    }else{
+      scrDownBtn.style.visibility = "visible";
+
+    }
 });
